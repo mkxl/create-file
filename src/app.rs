@@ -1,13 +1,12 @@
-use anyhow::Context;
-use anyhow::Error as AnyhowError;
+use anyhow::{Context, Error as AnyhowError};
 use clap::Parser;
 use derive_more::From;
-use mkutils::Tracing;
-use mkutils::Utils;
+use mkutils::{Tracing, Utils};
 use serde::{Deserialize, Serialize};
-use std::borrow::Cow;
-use std::path::Path;
-use std::path::PathBuf;
+use std::{
+    borrow::Cow,
+    path::{Path, PathBuf},
+};
 
 #[derive(Deserialize)]
 struct Entry {
@@ -33,18 +32,18 @@ impl App {
     const DEFAULT_DB_FILENAME: &'static str = "create-file-db.json";
 
     #[mkutils::context("unable to get DB filepath")]
-    fn db_filepath(&self) -> Result<Cow<Path>, AnyhowError> {
+    fn db_filepath(&self) -> Result<Cow<'_, Path>, AnyhowError> {
         if let Some(db_filepath) = self.db_filepath.as_deref() {
-            return db_filepath.borrowed().ok::<AnyhowError>();
+            return db_filepath.to_cow_borrowed().ok::<AnyhowError>();
         }
 
         #[allow(deprecated)]
-        let mut db_filepath = std::env::home_dir()
-            .context("unable to identify for home directory for default DB filepath")?;
+        let mut db_filepath =
+            std::env::home_dir().context("unable to identify for home directory for default DB filepath")?;
 
         db_filepath.push(Self::DEFAULT_DB_FILENAME);
 
-        db_filepath.owned::<Path>().ok()
+        db_filepath.into_cow_owned::<Path>().ok()
     }
 
     #[mkutils::context("unable to get DB rows")]
@@ -53,7 +52,7 @@ impl App {
             .open()
             .context_path("unable to open DB file", db_filepath)?
             .buf_reader()
-            .json_from_reader::<Vec<DbRow>>()
+            .to_value_from_json_reader::<Vec<DbRow>>()
             .context_path("unable to parse DB file", db_filepath)?
             .ok()
     }
@@ -77,12 +76,12 @@ impl App {
                 .open()
                 .context_path("unable to open entries file", entries_filepath)?
                 .buf_reader()
-                .json_from_reader::<Vec<Entry>>()
+                .to_value_from_json_reader::<Vec<Entry>>()
         } else {
             std::io::stdin()
                 .lock()
                 .buf_reader()
-                .json_from_reader::<Vec<Entry>>()
+                .to_value_from_json_reader::<Vec<Entry>>()
         }
         .context("unable to parse entries file")?
         .ok::<AnyhowError>()
@@ -119,7 +118,7 @@ impl App {
             .context_path("unable to create new DB file", db_filepath)?;
 
         db_rows
-            .json_to_writer(db_file)
+            .write_as_json_to(db_file)
             .context("unable to write to new DB file")?
             .ok()
     }
