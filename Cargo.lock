@@ -516,11 +516,11 @@ checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
 
 [[package]]
 name = "home"
-version = "0.5.11"
+version = "0.5.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "589533453244b0995c858700322199b2becb13b627df2851f64a2775d024abcf"
+checksum = "cc627f471c528ff0c4a49e1d5e60450c8f6461dd6d10ba9dcd3a61d3dff7728d"
 dependencies = [
- "windows-sys 0.59.0",
+ "windows-sys 0.61.1",
 ]
 
 [[package]]
@@ -754,9 +754,9 @@ dependencies = [
 
 [[package]]
 name = "mkutils"
-version = "0.1.104"
+version = "0.1.105"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c9a35f1cb14b2c68ac235970f1c48e7b7acb87a94c12ca88e9c50422f400145d"
+checksum = "0f8af2a921effce84a09546c843d4a844dda1f49216c9919b354290d5835fde9"
 dependencies = [
  "anyhow",
  "bytes",
@@ -781,9 +781,9 @@ dependencies = [
 
 [[package]]
 name = "mkutils-macros"
-version = "0.1.104"
+version = "0.1.105"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "00d0f18f0a00c6cce822db43c40a7c55c7a5dca4f6116d071a60d08c4b5c3683"
+checksum = "2300e7633b3bdb2795c563336ffeac80250124e3bb5f48cd7cecaab4cb5df4f5"
 dependencies = [
  "heck",
  "proc-macro2",
@@ -1585,15 +1585,6 @@ name = "windows-sys"
 version = "0.52.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "282be5f36a8ce781fad8c8ae18fa3f9beff57ec1b52cb3de0789201425d9a33d"
-dependencies = [
- "windows-targets 0.52.6",
-]
-
-[[package]]
-name = "windows-sys"
-version = "0.59.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1e38bc4d79ed67fd075bcc251a1c39b32a1776bbe92e5bef1f0bf1f8c531853b"
 dependencies = [
  "windows-targets 0.52.6",
 ]
