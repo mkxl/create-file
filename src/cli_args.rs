@@ -93,28 +93,32 @@ impl CliArgs {
         }
     }
 
-    fn get_database_row_helper(dst_filepath: Utf8PathBuf, entry: &Entry) -> Result<DbRow, AnyhowError> {
+    fn copy_entry_source_to_dst_filepath(dst_filepath: &Utf8Path, entry: &Entry) -> Result<(), AnyhowError> {
         if let Some(dst_parent_dirpath) = dst_filepath.parent() {
             dst_parent_dirpath.create_dir_all()?;
         }
 
-        entry.source.copy_to(&dst_filepath)?;
+        entry.source.copy_to(dst_filepath)?;
 
-        dst_filepath.convert::<DbRow>().ok()
+        ().ok()
     }
 
     fn get_database_row((dst_filepath, entry): (Utf8PathBuf, Entry)) -> Option<DbRow> {
-        let database_row_res = Self::get_database_row_helper(dst_filepath.clone(), &entry);
+        let unit_res = Self::copy_entry_source_to_dst_filepath(&dst_filepath, &entry);
 
         mkutils::trace!(
-            level = database_row_res.level(),
-            status = %database_row_res.status_display(),
+            level = unit_res.level(),
+            status = %unit_res.status_display(),
             src = %entry.source,
             dst = %dst_filepath,
             message = "process entry"
         );
 
-        database_row_res.ok()
+        if unit_res.is_ok() {
+            dst_filepath.convert::<DbRow>().some()
+        } else {
+            None
+        }
     }
 
     fn write_database(database_rows: &[DbRow], database_filepath: &Utf8Path) -> Result<(), AnyhowError> {
