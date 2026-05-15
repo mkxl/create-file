@@ -131,7 +131,7 @@ impl CliArgs {
     pub fn run(&self) {
         Tracing::default().init();
 
-        let database_filepath_res = self.get_database_filepath();
+        let database_filepath_res = self.get_database_filepath().log_if_error();
 
         if let Ok(database_filepath) = &database_filepath_res {
             Self::delete_database_files(database_filepath);
