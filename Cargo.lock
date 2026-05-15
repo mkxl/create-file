@@ -194,6 +194,9 @@ name = "camino"
 version = "1.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e629a66d692cb9ff1a1c664e41771b3dcaf961985a9774c0eb0bd1b51cf60a48"
+dependencies = [
+ "serde_core",
+]
 
 [[package]]
 name = "cfg-if"
@@ -309,6 +312,7 @@ name = "create-file"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "camino",
  "clap",
  "derive_more",
  "mkutils",
@@ -754,9 +758,9 @@ dependencies = [
 
 [[package]]
 name = "mkutils"
-version = "0.1.105"
+version = "0.1.126"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0f8af2a921effce84a09546c843d4a844dda1f49216c9919b354290d5835fde9"
+checksum = "72dc4b75a29faa3ba08546f01ad6f099c6fd24a6723c3e8ee5256fe31178cf7e"
 dependencies = [
  "anyhow",
  "bytes",
@@ -767,6 +771,7 @@ dependencies = [
  "home",
  "mkutils-macros",
  "num",
+ "paste",
  "rmp-serde",
  "serde",
  "serde_json",
@@ -781,9 +786,9 @@ dependencies = [
 
 [[package]]
 name = "mkutils-macros"
-version = "0.1.105"
+version = "0.1.126"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2300e7633b3bdb2795c563336ffeac80250124e3bb5f48cd7cecaab4cb5df4f5"
+checksum = "50b44671e725733136cc7fe48a94876cd385181b3a3e7df63296f4282a6f3e6c"
 dependencies = [
  "heck",
  "proc-macro2",
@@ -900,6 +905,12 @@ name = "option-ext"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "04744f49eae99ab78e0d5c0b603ab218f515ea8cfe5a456d7629ad883a3b6e7d"
+
+[[package]]
+name = "paste"
+version = "1.0.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "57c0d7b74b563b49d38dae00a0c37d4d6de9b432382b2892f0574ddcae73fd0a"
 
 [[package]]
 name = "percent-encoding"

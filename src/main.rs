@@ -1,9 +1,8 @@
-mod app;
+mod cli_args;
 
-use crate::app::App;
-use anyhow::Error as AnyhowError;
+use crate::cli_args::CliArgs;
 use clap::Parser;
 
-fn main() -> Result<(), AnyhowError> {
-    App::parse().run()
+fn main() {
+    CliArgs::parse().run();
 }
