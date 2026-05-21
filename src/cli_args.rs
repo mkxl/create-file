@@ -25,6 +25,9 @@ pub struct CliArgs {
 
     #[arg(long = "entries-file")]
     entries_filepath: Option<Utf8PathBuf>,
+
+    #[arg(long = "root-dir", default_value = ".")]
+    dst_root_dirpath: Utf8PathBuf,
 }
 
 impl CliArgs {
@@ -75,21 +78,26 @@ impl CliArgs {
         }
     }
 
-    fn get_entry_map_from_reader<R: Read>(reader: R) -> Result<EntryMap, AnyhowError> {
+    fn get_entry_map_from_reader<R: Read>(&self, reader: R) -> Result<EntryMap, AnyhowError> {
         reader
             .buf_reader()
             .to_value_from_json_reader::<EntryMap>()
-            .context(Self::PARSE_ENTRY_MAP_ERROR_MESSAGE)
+            .context(Self::PARSE_ENTRY_MAP_ERROR_MESSAGE)?
+            .into_iter()
+            .map(|(dst_filepath, entry)| (self.dst_root_dirpath.clone().join_path(dst_filepath), entry))
+            .collect::<EntryMap>()
+            .ok()
     }
 
     fn get_entry_map(&self) -> Result<HashMap<Utf8PathBuf, Entry>, AnyhowError> {
         if let Some(entries_filepath) = &self.entries_filepath {
-            entries_filepath
+            let reader = entries_filepath
                 .open()
-                .context_path(Self::READ_ENTRY_MAP_ERROR_MESSAGE, entries_filepath)?
-                .pipe_into(Self::get_entry_map_from_reader)
+                .context_path(Self::READ_ENTRY_MAP_ERROR_MESSAGE, entries_filepath)?;
+
+            self.get_entry_map_from_reader(reader)
         } else {
-            std::io::stdin().lock().pipe_into(Self::get_entry_map_from_reader)
+            self.get_entry_map_from_reader(std::io::stdin().lock())
         }
     }
 
