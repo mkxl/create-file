@@ -26,7 +26,7 @@ pub struct CliArgs {
     #[arg(long = "entries-file")]
     entries_filepath: Option<Utf8PathBuf>,
 
-    #[arg(long = "root-dir", default_value = ".")]
+    #[arg(long = "dst-root-dir", default_value = ".")]
     dst_root_dirpath: Utf8PathBuf,
 }
 
