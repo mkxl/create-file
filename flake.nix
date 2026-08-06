@@ -25,13 +25,13 @@
             file = ./rust-toolchain.toml;
             sha256 = "sha256-K8/aNzEwNFy5A+HIFCFhHbilHJezC3HqOc9YItLeZ7c=";
           };
-          crane-lib = (crane.mkLib pkgs).overrideToolchain (pkgs: rust-toolchain);
+          crane-lib = (crane.mkLib pkgs).overrideToolchain rust-toolchain;
         in
         {
           packages.default = crane-lib.buildPackage {
             src = crane-lib.cleanCargoSource ./.;
           };
-          devShells.default = crane-lib.devShell {};
+          devShells.default = crane-lib.devShell { };
           formatter = pkgs.nixfmt;
         }
       )
